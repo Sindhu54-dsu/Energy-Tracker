@@ -2,8 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Smart Energy Tracker</title>
+
+  <!-- Manifest for PWA -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Link to external CSS -->
   <link rel="stylesheet" href="style.css">
+
+  <!-- Favicon or icon -->
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/1041/1041916.png">
 </head>
 <body>
   <div class="container">
@@ -15,6 +24,7 @@
       <p><span id="latestReading">0</span> kWh</p>
     </div>
 
+    <!-- Data Input Form -->
     <form id="energyForm">
       <label for="date">Date:</label>
       <input type="date" id="date" required>
@@ -25,14 +35,27 @@
       <button type="submit">Add Entry</button>
     </form>
 
+    <!-- History List -->
     <h2>Usage History</h2>
     <ul id="energyList"></ul>
 
+    <!-- Total Usage -->
     <h2>Total Energy Used: <span id="totalUsage">0</span> kWh</h2>
 
+    <!-- Clear Button -->
     <button id="clearData" class="danger">Clear All Data</button>
   </div>
 
+  <!-- Main App Script -->
   <script src="script.js"></script>
+
+  <!-- Register Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log('✅ Service Worker Registered'))
+        .catch(err => console.error('Service Worker Error:', err));
+    }
+  </script>
 </body>
 </html>
