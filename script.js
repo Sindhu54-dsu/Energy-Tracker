@@ -9,15 +9,35 @@ let entries = JSON.parse(localStorage.getItem('energyEntries')) || [];
 
 function showTip(usage) {
   const tips = [
-    "Turn off fans/lights when leaving a room.",
-    "Use LED bulbs instead of CFLs.",
-    "Unplug idle chargers and electronics.",
-    "Use appliances during off-peak hours.",
-    "Limit use of high-energy devices like geysers."
+    "Turn off lights when not in use.",
+    "Use energy-efficient appliances.",
+    "Unplug chargers when not charging.",
+    "Use natural light during the day.",
+    "Avoid using standby mode."
   ];
 
   if (usage > 5) {
-    alert("⚠️ High Usage Warning: You consumed " + usage + " kWh!\n💡 Tip: " + tips[Math.floor(Math.random() * tips.length)]);
+    const tip = tips[Math.floor(Math.random() * tips.length)];
+    
+    // Show alert
+    alert("⚠️ High Usage Detected!\nTip: " + tip);
+
+    // Try showing notification
+    if ("Notification" in window) {
+      if (Notification.permission === "granted") {
+        new Notification("⚠️ High Energy Usage", {
+          body: tip
+        });
+      } else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then(permission => {
+          if (permission === "granted") {
+            new Notification("⚠️ High Energy Usage", {
+              body: tip
+            });
+          }
+        });
+      }
+    }
   }
 }
 
@@ -33,6 +53,7 @@ function renderEntries() {
   });
 
   totalUsage.textContent = total.toFixed(2);
+
   if (entries.length > 0) {
     latestReading.textContent = entries[entries.length - 1].usage;
   } else {
